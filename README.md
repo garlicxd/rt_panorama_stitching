@@ -218,48 +218,6 @@ Wall Dataset (Poor Quality - Case Study)
 - Solution: Quality control system rejects poor matches (< 25% inlier ratio)
 - Result: Only 2 images processed to maintain quality
 
-## Technical Implementation
-
-### Architecture Overview
-```
-Input Images → Feature Detection → Feature Matching → Homography Estimation → Image Warping → Blending → Output Panorama
-              ↓                    ↓                   ↓                        ↓             ↓
-         (SIFT/ORB)           (Lowe's Ratio)      (RANSAC)            (Perspective Transform) (Feathering/Overlay)
-```
-
-### Key Algorithms
-1. SIFT Features: Scale-invariant detection with 128-dimensional descriptors
-2. ORB Features: Fast binary descriptors with rotation invariance
-3. Brute-Force Matching: Exhaustive search with Lowe's ratio test (threshold: 0.8)
-4. RANSAC Homography: Robust estimation with configurable pixel thresholds
-5. Linear Feathering: Smooth blending based on distance from image boundaries
-
-### Data Structures
-- FeatureMatchingResults: Stores keypoints, matches, and timing data
-- HomographyResults: Contains homography matrix and inlier information  
-- ExperimentalResults: Comprehensive metrics for analysis export
-
-### Performance Functions
-- resizeImageIfNeeded(): Scales large input images to manageable sizes
-- compressPanoramaIfNeeded(): Progressive compression during multi-image stitching
-- isPanoramaTooLarge(): Safety checks to prevent memory overflow
-
-## Known Limitations
-
-### Current Constraints
-1. Sequential Stitching: Only supports linear image sequences (not full 360° panoramas)
-2. Memory Limits: Large images require automatic downscaling  
-3. Panorama Size: Hard limits prevent very large panorama generation
-4. Feature Matching: Relies on sufficient texture and overlap between images
-5. Planar Assumption: Works best with roughly planar scenes
-6. Repetitive Textures: Quality control rejects scenes with ambiguous features
-
-### Dataset-Specific Results
-- Indoor: Successfully processes 5/5 images (100%) with good quality
-- Outdoor: Processes 6/7 images (86%) with excellent alignment
-- Wall: Processes 2/6 images (33%) - quality control prevents distorted output
-
-
 ## Project Structure
 ```
 rt_panorama_stitching/
